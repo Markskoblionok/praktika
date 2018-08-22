@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="import" href="head.html">
+</head>
+<!--функция которая вызывается при загрузке страницы в браузере-->
+<body onload="getCats()">
+<script>
+    // функция для получения котов с сервера
+    // она срабатывает отдельно от загрузки страницы
+    function getCats() {
+        // создаем объект для отправки запроса
+        var xmlhttp = new XMLHttpRequest();
+        // указываем на какой урл будем отправлять запрос
+        var url = '/cats';
+        // описываем действия когда запрос будет отправлен и на него будет получен результат
+        xmlhttp.onreadystatechange = function (ev) {
+            if (this.readyState === 4 && this.status === 200) {
+                // вытаскиваем тело ответа в формате JSON
+                var cats = JSON.parse(this.responseText);
+                // находим в HTML-ке блок где следует разметстить котов
+                var catsTable = document.getElementById('cats_table');
+                var htmlResult = "";
+                // просто формируем html-код содержащий таблицу с котами
+                htmlResult = "<thead class=\"thead-dark\">";
+                htmlResult += "<tr>" +
+                                "<th>Name</th>" +
+                                "<th>Color</th>" +
+                            "</tr>";
+                htmlResult += "</thead>";
+                for (var i = 0; i < cats.length; i++) {
+                    htmlResult += "<tr onclick='alert(\"" + cats[i].name + "\")'>";
+                    htmlResult += "<td>" + cats[i].name + "</td>";
+                    htmlResult += "<td>" + cats[i].color + "</td>";
+                    htmlResult += "</tr>";
+                }
+                // рисуешь таблицу в html
+                catsTable.innerHTML = htmlResult;
+
+            }
+        };
+        // открываем шлюз для отправки запроса
+        xmlhttp.open("GET", url, true);
+        // посылаем запрос
+        xmlhttp.send();
+    }
+</script>
+<form action="/cats" method="post">
+    <input type="text" name="name">
+    <input type="text" name="color">
+    <input type="submit" value="SEND">
+</form>
+<div>
+    <table class="table" id="cats_table">
+
+    </table>
+</div>
+</body>
+</html>

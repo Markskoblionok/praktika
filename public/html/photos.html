@@ -1,0 +1,93 @@
+<head>
+    <style type="text/css">
+    </style>
+
+    <title>Фотографии</title>
+    <link rel="import" href="head.html">
+</head>
+
+<body style="font-size=50; color:Black; background-color:#d9d9d9" onload="getCats()">
+<nav class="navbar navbar-dark bg-dark" style="font-family: 'Slabo+27px', sans-serif !important">
+    <a class="navbar-brand" href="index.html">
+        <img src=https://vignette.wikia.nocookie.net/catswarriorsrol/images/5/54/%D0%91%D0%B5%D0%B7_%D1%84%D0%BE%D0%BD%D0%B0.png/revision/latest?cb=20150816180807&path-prefix=ru width="30" height="30" class="d-inline-block align-top" alt="">
+        Home
+    </a>
+</nav>
+<script>
+    function getCats() {
+        var xmlhttp = new XMLHttpRequest();
+        var url = '/cats';
+        xmlhttp.onreadystatechange = function (ev) {
+            if (this.readyState === 4 && this.status === 200) {
+                var cats = JSON.parse(this.responseText);
+                var $row = $("<div class=\"row\" style=\"margin-top: 20px;\">");
+                for (var i = 0; i < cats.length - 2; i++) {
+                    if (i % 3 === 0) {
+                        $row = $("<div class=\"row\" style=\"margin-top: 20px;\">");
+                    }
+                    var $column = $("<div class=\"col-md-4\">");
+                    var $card = $("<div class=\"card\" style=\"width: 18rem; height: 26rem\">");
+                    var $img = $("<img class=\"card-img-top\"  src='" + cats[i].photo + "'</>");
+                    var $img2 = $("<img class=\"card-img-top\" style=\"height: auto; max-width: 100px\"  src='" + cats[i].photo + "'</>");
+                    var $card_body = $("<div class=\"card-body\">");
+                    var $name = $("<p>" + cats[i].name + "</p>");
+                    var $buttonopen = $("<button class=\"btn btn-outline-secondary\" style=\"font-size: 20pt; font-weight: bold; margin: 0px 20px 0px\" data-toggle=\"modal\" data-target=\"#" + [i] + "\">Open</button>");
+                    var $modalfade = $("<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\" id=\"" + [i] + "\" area-labelledby=\"" + [i] + "\" area-hidden=\"true\">");
+                    var $modaldialog = $("<div class=\"modal-dialog\" role=\"document\">");
+                    var $modalcontent = $("<div class=\"modal-content\">");
+                    var $modalheader = $("<div class=\"modal-header\">");
+                    var $modaltitle = $("<h5 class=\"modal-title\" id=\"" + [i] + "\" style=\"font-weight: bold; font-size: 20pt\">" + cats[i].name + "</h5>");
+                    var $buttonclose = $("<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"> </button>");
+                    var $buttoncloseoptions = $("<span aria-hidden=\"true\">&times;</span>");
+                    var $modalbody = $("<div class=\"modal-body\">");
+
+
+
+                    $card_body.append($name);
+                    $card.append($img2);
+                    $card.append($card_body);
+                    $column.append($card);
+                    $row.append($column);
+                    $("#cats_card").append($row);
+                    $card_body.append($buttonopen);
+                    $card_body.append($modalfade);
+                    $modalfade.append($modaldialog);
+                    $modaldialog.append($modalcontent);
+                    $modalcontent.append($modalheader);
+                    $modalheader.append($modaltitle);
+                    $modalheader.append($buttonclose);
+                    $buttonclose.append($buttoncloseoptions);
+                    $modalcontent.append($modalbody);
+                    $modalbody.append($img);
+
+
+
+
+
+
+                }
+
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+</script>
+<form action="/cats" method="post">
+    <input type="text" name="name">
+    <input type="text" name="photo">
+    <input type="submit" value="SEND">
+</form>
+<div class="container" id="cats_card">
+
+</div>
+
+
+<div class="container" style="padding-top: 140px">
+    <footer class="footer fixed-bottom bg-dark">
+        <div class="container" style="align-content: center; color: white">
+            <span class="text" style="color: white;">&copy; 2018 Skoblionok Mark</span>
+        </div>
+    </footer>
+</div>
+</body>
